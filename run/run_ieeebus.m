@@ -3,7 +3,7 @@ function run_ieeebus()
 close all;
 
 data_file    = 'ieeebus';
-results_file = 'results_ieeebus';
+results_file = 'results_ieeebus_new';
 
 fpath = fullfile(getRoot(),'data',data_file);
 load(fpath)
