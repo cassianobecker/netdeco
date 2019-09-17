@@ -5,7 +5,7 @@ close all;
 problem_file = 'problems_erdos_resub';
 results_file = 'results_erdos_resub';
 
-fpath = fullfile(getRoot(), 'out', 'data', problem_file);
+fpath = fullfile(getRoot(), 'data', problem_file);
 load(fpath)
 
 %%%%%%%%%%%%%%% ENUMERATE VARYING PARAMETERS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
