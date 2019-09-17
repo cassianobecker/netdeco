@@ -2,10 +2,10 @@ function run_erdos()
 
 close all;
 
-problem_file = 'problems_erdos';
-results_file = 'results_erdos_new';
+problem_file = 'problems_erdos_resub';
+results_file = 'results_erdos_resub';
 
-fpath = fullfile(getRoot(), 'data', problem_file);
+fpath = fullfile(getRoot(), 'out', 'data', problem_file);
 load(fpath)
 
 %%%%%%%%%%%%%%% ENUMERATE VARYING PARAMETERS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -37,8 +37,8 @@ par.m.tol_eq   = 1e-7;
 par.m.tol_sparsity = 1e-4;
 par.m.rel_tol_dec = 1e-4;
 
-par.m.max_no_decrease = 8;
-par.m.MAX_ITER = 400;
+par.m.max_no_decrease = 20;
+par.m.MAX_ITER = 2000;
 
 for i=1:ni
     
@@ -49,6 +49,7 @@ for i=1:ni
     for j=1:nj
 
         par.s.gain_min_lam = par.s.lam_min_gains(j);
+        %par.s.gain_min_lam = 1e-4;
         par.s.gain_tr_inv = par.s.tr_inv_gains(j);
         
         for l=1:nl
@@ -70,15 +71,15 @@ for i=1:ni
             
             out{i, j, l} = run_p_erdos_unit(A0, B, par); %#ok<*AGROW>
             
+            fpath = fullfile(getRoot(), 'out', 'mat', results_file);
+            save(fpath, 'out');
+            
         end
         
     end
     
     %%%%%%%%%%%%%%%% SAVE STATS %%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
-
-fpath = fullfile(getRoot(), 'out', 'mat', results_file);
-save(fpath, 'out');
 
 end
 
@@ -91,7 +92,8 @@ function out = run_p_erdos_unit(A0, B, par)
 W0 = dlyap(A0, B*B');
 lams = sort(real(eig(W0)),'ascend');
 
-par.s.min_lam = lams(1);
+%par.s.min_lam = lams(1);
+par.s.min_lam = 1e-6;
 par.s.min_lam_bar = par.s.gain_min_lam*par.s.min_lam;
 
 par.s.tr_inv = sum(1./lams);
