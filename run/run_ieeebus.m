@@ -3,9 +3,9 @@ function run_ieeebus()
 close all;
 
 data_file    = 'ieeebus';
-results_file = 'results_ieeebus_new';
+results_file = 'results_ieeebus_resub';
 
-fpath = fullfile(getRoot(),'data',data_file);
+fpath = fullfile(getRoot(),'out','data',data_file);
 load(fpath)
 
 if rank(ctrb(A0,B)) < size(A0, 1)
@@ -14,7 +14,7 @@ end
 
 %%%%%%%%%%%%%%% ENUMERATE VARYING PARAMETERS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-par.s.min_lam_gains = [10, 100];
+par.s.min_lam_gains = [10, 50];
 par.s.tr_inv_gains  = [1/10 1/50];
 
 par.s.modes_tr_inv  = [0 1];
@@ -42,7 +42,7 @@ par.m.tol_sparsity = 1e-4;
 par.m.rel_tol_dec = 1e-4;
 
 par.m.max_no_decrease = 8;
-par.m.MAX_ITER = 500;
+par.m.MAX_ITER = 1000;
 
 %%%%%%%%%%%%%%%%% LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -79,16 +79,17 @@ for i=1:ni
         
         out{i,j} = run_p_IEEEbus_unit(A0, B, par); %#ok<*AGROW>
         
-        fig_reg_path(out{i,j});
+        %fig_reg_path(out{i,j});
+        
+        fpath = fullfile(getRoot(), 'out', 'mat', results_file);
+
+        save(fpath, 'out');
         
     end
 end
 
 %%%%%%%%%%%%%%%% SAVE STATS %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-fpath = fullfile(getRoot(), 'out', 'mat', results_file);
-
-save(fpath, 'out');
 
 end
 
