@@ -8,7 +8,11 @@ end
 
 fpath = mfilename('fullpath');
 parts = strsplit(fpath,filesep);
-p = ['/' fullfile(parts{1:end-3-up})];
 
+p = [fullfile(parts{1:end-3-up})];
 
+if ~ispc
+   p = ['/' p];
+end
+    
 end
